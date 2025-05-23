@@ -167,24 +167,38 @@ const ErrorState = ({
     </div>
 );
 
+// Minimal loading state with text
 const LoadingState = () => (
-    <>
-        {Array(6)
-            .fill(0)
-            .map((_, i) => (
-                <div key={i} className="space-y-3">
-                    <Skeleton className="h-48 w-full" />
-                    <Skeleton className="h-4 w-3/4" />
-                    <Skeleton className="h-3 w-full" />
-                    <Skeleton className="h-3 w-full" />
-                </div>
-            ))}
-    </>
+    <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
+        <div className="flex flex-col items-center space-y-4">
+            <div className="relative w-16 h-16">
+                <div className="absolute inset-0 rounded-full border-4 border-teal-200 opacity-25"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-t-teal-500 animate-spin"></div>
+            </div>
+            <h3 className="text-xl font-medium text-teal-700">กำลังโหลดข้อมูล</h3>
+            <p className="text-muted-foreground">โปรดรอสักครู่...</p>
+        </div>
+    </div>
 );
+
+// Minimal fetching indicator component that shows when data is being revalidated
+const FetchingIndicator = ({ fetching }: { fetching: boolean }) => {
+    if (!fetching) return null;
+    
+    return (
+        <div className="fixed bottom-4 right-4 bg-white shadow-md rounded-full px-4 py-2 flex items-center space-x-2 animate-in fade-in-0 slide-in-from-bottom-4 z-50">
+            <div className="relative w-4 h-4">
+                <div className="absolute inset-0 rounded-full border-2 border-teal-200 opacity-25"></div>
+                <div className="absolute inset-0 rounded-full border-2 border-t-teal-500 animate-spin"></div>
+            </div>
+            <span className="text-sm font-medium text-teal-700">กำลังโหลดข้อมูล</span>
+        </div>
+    );
+};
 
 export default function Home() {
     // Get data from context
-    const { missingPersons, loading, error, refetch } = useMissingPersons();
+    const { missingPersons, loading, fetching, error, refetch, lastUpdated } = useMissingPersons();
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [activeTab, setActiveTab] = useState<string>("missing");
     const [currentPages, setCurrentPages] = useState({
@@ -266,6 +280,9 @@ export default function Home() {
 
     return (
         <div className="flex min-h-screen flex-col">
+            {/* Fetching indicator for data revalidation */}
+            <FetchingIndicator fetching={fetching} />
+            
             <main className="flex-1">
                 <HeroSection
                     searchQuery={searchQuery}
@@ -327,7 +344,17 @@ export default function Home() {
                                         &rdquo;
                                     </span>
                                 )}
-                                {!searchQuery && (
+                                {!searchQuery && loading ? (
+                                    <span className="inline-flex items-center gap-2">
+                                        <span className="relative w-4 h-4">
+                                            <span className="absolute inset-0 rounded-full border-2 border-teal-200 opacity-25"></span>
+                                            <span className="absolute inset-0 rounded-full border-2 border-t-teal-500 animate-spin"></span>
+                                        </span>
+                                        <span className="font-medium text-teal-700">
+                                            กำลังโหลดข้อมูล
+                                        </span>
+                                    </span>
+                                ) : !searchQuery && (
                                     <span className="inline-flex items-center gap-2">
                                         <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                                         พบ{" "}
