@@ -22,7 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import MissingPersonCard from "@/components/missingpersoncard";
 import { HeroSection } from "@/components/hero-section";
 import { useMissingPersons } from "@/context/MissingPersonsContext";
@@ -198,7 +198,7 @@ const FetchingIndicator = ({ fetching }: { fetching: boolean }) => {
 
 export default function Home() {
     // Get data from context
-    const { missingPersons, loading, fetching, error, refetch, lastUpdated } = useMissingPersons();
+    const { missingPersons, loading, fetching, error, refetch } = useMissingPersons();
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [activeTab, setActiveTab] = useState<string>("missing");
     const [currentPages, setCurrentPages] = useState({
