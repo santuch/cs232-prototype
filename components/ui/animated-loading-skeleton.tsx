@@ -33,7 +33,7 @@ const AnimatedLoadingSkeleton = () => {
     const generateSearchPath = (config: GridConfig) => {
         const { numCards, cols, xBase, yBase, xStep, yStep } = config
         const rows = Math.ceil(numCards / cols) // Calculate rows based on cards and columns
-        let allPositions = []
+        const allPositions = []
 
         // Generate grid positions for cards
         for (let row = 0; row < rows; row++) {
@@ -131,7 +131,7 @@ const AnimatedLoadingSkeleton = () => {
                     <motion.div
                         className="absolute z-10 pointer-events-none"
                         animate={controls}
-                        style={{ left: 24, top: 24 }}
+                        style={{ left: 20, top: 20 }}
                     >
                         <motion.div
                             className="bg-teal-500/20 p-4 rounded-full backdrop-blur-sm shadow-lg"

@@ -26,7 +26,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import MissingPersonCard from "@/components/missingpersoncard";
 import { HeroSection } from "@/components/hero-section";
 import { useMissingPersons } from "@/context/MissingPersonsContext";
-import { NotFoundPage } from "@/components/ui/404-page-not-found";
 import {
     MissingPerson,
     extractAge,
