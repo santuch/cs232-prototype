@@ -15,7 +15,7 @@ export interface MissingPerson {
 export async function getMissingPersons(): Promise<MissingPerson[]> {
     try {
         const response = await fetch(
-            "https://v8vxzw8638.execute-api.us-east-1.amazonaws.com/default/get_missingDatabase",
+            "https://hofn6opl8l.execute-api.us-east-1.amazonaws.com/default/get_missingDatabase",
             { cache: "no-store" } // Don't cache the response
         );
 

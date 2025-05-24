@@ -9,10 +9,8 @@ import React, {
 import { MissingPerson } from "@/lib/api";
 import useSWR, { SWRConfig } from "swr";
 
-const API_URL = "https://v8vxzw8638.execute-api.us-east-1.amazonaws.com/default/get_missingDatabase";
+const API_URL = "https://hofn6opl8l.execute-api.us-east-1.amazonaws.com/default/get_missingDatabase";
 
-// Custom fetcher with error handling
-// Custom API error with additional properties
 class ApiError extends Error {
     info: any = null;
     status: number = 0;

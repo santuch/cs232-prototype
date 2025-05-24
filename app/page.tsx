@@ -26,6 +26,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import MissingPersonCard from "@/components/missingpersoncard";
 import { HeroSection } from "@/components/hero-section";
 import { useMissingPersons } from "@/context/MissingPersonsContext";
+import { NotFoundPage } from "@/components/ui/404-page-not-found";
 import {
     MissingPerson,
     extractAge,
@@ -151,35 +152,56 @@ const Pagination = ({
     );
 };
 
-// Add this near the error state rendering
+// Custom error state component that uses the NotFoundPage with Thai error messages
 const ErrorState = ({
     error,
     onRetry,
 }: {
     error: string;
     onRetry: () => void;
-}) => (
-    <div className="col-span-3 flex flex-col items-center justify-center space-y-4 text-center">
-        <div className="text-red-500">{error}</div>
-        <Button onClick={onRetry} variant="outline">
-            ลองใหม่อีกครั้ง
-        </Button>
-    </div>
-);
+}) => {
+    // Create a modified version of NotFoundPage with custom error message
+    return (
+        <div className="col-span-full">
+            <section className="bg-white font-serif min-h-[60vh] flex items-center justify-center">
+                <div className="container mx-auto">
+                    <div className="flex justify-center">
+                        <div className="w-full sm:w-10/12 md:w-8/12 text-center">
+                            <div
+                                className="bg-[url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif)] h-[200px] sm:h-[250px] md:h-[300px] bg-center bg-no-repeat bg-contain"
+                                aria-hidden="true"
+                            >
+                                <h2 className="text-center text-black text-5xl sm:text-6xl md:text-7xl pt-3 sm:pt-8">
+                                    ไม่พบข้อมูล
+                                </h2>
+                            </div>
 
-// Minimal loading state with text
-const LoadingState = () => (
-    <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-        <div className="flex flex-col items-center space-y-4">
-            <div className="relative w-16 h-16">
-                <div className="absolute inset-0 rounded-full border-4 border-teal-200 opacity-25"></div>
-                <div className="absolute inset-0 rounded-full border-4 border-t-teal-500 animate-spin"></div>
-            </div>
-            <h3 className="text-xl font-medium text-teal-700">กำลังโหลดข้อมูล</h3>
-            <p className="text-muted-foreground">โปรดรอสักครู่...</p>
+                            <div className="mt-[-30px]">
+                                <h3 className="text-xl text-black sm:text-2xl font-bold mb-4">
+                                    เกิดข้อผิดพลาดในการโหลดข้อมูล
+                                </h3>
+                                <p className="mb-6 sm:mb-5 text-red-500">
+                                    {error || "ไม่สามารถโหลดข้อมูลได้ในขณะนี้"}
+                                </p>
+
+                                <Button
+                                    variant="default"
+                                    onClick={onRetry}
+                                    className="my-5 bg-teal-600 hover:bg-teal-700"
+                                >
+                                    ลองใหม่อีกครั้ง
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-    </div>
-);
+    );
+};
+
+// Import the animated loading skeleton component
+import AnimatedLoadingSkeleton from "@/components/ui/animated-loading-skeleton";
 
 // Minimal fetching indicator component that shows when data is being revalidated
 const FetchingIndicator = ({ fetching }: { fetching: boolean }) => {
@@ -409,7 +431,9 @@ export default function Home() {
                             <TabsContent value="missing" className="mt-6">
                                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
                                     {loading ? (
-                                        <LoadingState />
+                                        <div className="col-span-full">
+                                            <AnimatedLoadingSkeleton />
+                                        </div>
                                     ) : error ? (
                                         <ErrorState
                                             error={error}
@@ -473,21 +497,9 @@ export default function Home() {
                             <TabsContent value="recent" className="mt-6">
                                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
                                     {loading ? (
-                                        Array(8)
-                                            .fill(0)
-                                            .map((_, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="space-y-4 animate-pulse"
-                                                >
-                                                    <div className="h-56 w-full bg-muted/50 rounded-xl" />
-                                                    <div className="space-y-2 p-4">
-                                                        <div className="h-4 bg-muted/50 rounded w-3/4" />
-                                                        <div className="h-3 bg-muted/50 rounded w-full" />
-                                                        <div className="h-3 bg-muted/50 rounded w-2/3" />
-                                                    </div>
-                                                </div>
-                                            ))
+                                        <div className="col-span-full">
+                                            <AnimatedLoadingSkeleton />
+                                        </div>
                                     ) : recentPersons.length === 0 ? (
                                         <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
                                             <div className="w-24 h-24 rounded-full bg-muted/50 flex items-center justify-center mb-4">
